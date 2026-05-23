@@ -1,0 +1,262 @@
+MariaDB [(none)]> use clothes_store;
+Database changed
+MariaDB [clothes_store]> create table item(
+    -> itemID int not null,
+    -> itemNAME varchar(22),
+    -> itemPRICE int,
+    -> itemCOLOR varchar(10),
+    -> itemSIZE varchar(15),
+    -> primary key (itemID));
+Query OK, 0 rows affected (0.204 sec)
+MariaDB [clothes_store]> create table brand(
+    -> brandID int not null,
+    -> brandNAME varchar(15),
+    -> brandTYPES varchar(30),
+    -> primary key (brandID));
+Query OK, 0 rows affected (0.029 sec)
+
+MariaDB [clothes_store]> alter table item
+    -> add brandID int,
+    -> add foreign key(brandID) references brand(brandID);
+Query OK, 0 rows affected (0.118 sec)
+MariaDB [clothes_store]> create table store(
+    -> storeID int not null,
+    -> storeNAME varchar(24),
+    -> storeLOCATION varchar(67),
+    -> primary key (storeID));
+Query OK, 0 rows affected (0.015 sec)
+
+MariaDB [clothes_store]> alter table item
+    -> add storeID int,
+    -> add foreign key(storeID) references store(storeID);
+Query OK, 0 rows affected (0.065 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> create table cus(
+    -> cusID int not null,
+    -> cusNAME varchar(87),
+    -> cusemail varchar(76),
+    -> primary key (cusID));
+Query OK, 0 rows affected (0.016 sec)
+MariaDB [clothes_store]> alter table item
+    -> add cusID int,
+    -> add foreign key (cusID) references cus(cusID);
+Query OK, 0 rows affected (0.081 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> create table trans(
+    -> transID int not null,
+    -> transDATE date,
+    -> transTOTAL int,
+    -> primary key(transID));
+Query OK, 0 rows affected (0.021 sec)
+
+MariaDB [clothes_store]> alter table cus
+    -> add transID int,
+    -> add foreign key(transID) references trans(transID);
+Query OK, 0 rows affected (0.069 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> create table employees(
+    -> employeesID int not null,
+    -> employeesNAME varchar(67),
+    -> employeesSALARY int,
+    -> primary key(employeesID));
+Query OK, 0 rows affected (0.016 sec)
+MariaDB [clothes_store]> alter table store
+    -> add employeesID int,
+    -> add foreign key(employeesID) references employees(employeesID);
+Query OK, 0 rows affected (0.058 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> desc item;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| itemID    | int(11)     | NO   | PRI | NULL    |       |
+| itemNAME  | varchar(22) | YES  |     | NULL    |       |
+| itemPRICE | int(11)     | YES  |     | NULL    |       |
+| itemCOLOR | varchar(10) | YES  |     | NULL    |       |
+| itemSIZE  | varchar(15) | YES  |     | NULL    |       |
+| brandID   | int(11)     | YES  | MUL | NULL    |       |
+| storeID   | int(11)     | YES  | MUL | NULL    |       |
+| cusID     | int(11)     | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+8 rows in set (0.022 sec)
+
+MariaDB [clothes_store]> desc brand;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| brandID    | int(11)     | NO   | PRI | NULL    |       |
+| brandNAME  | varchar(15) | YES  |     | NULL    |       |
+| brandTYPES | varchar(30) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.014 sec)
+
+MariaDB [clothes_store]> desc employees;
++-----------------+-------------+------+-----+---------+-------+
+| Field           | Type        | Null | Key | Default | Extra |
++-----------------+-------------+------+-----+---------+-------+
+| employeesID     | int(11)     | NO   | PRI | NULL    |       |
+| employeesNAME   | varchar(67) | YES  |     | NULL    |       |
+| employeesSALARY | int(11)     | YES  |     | NULL    |       |
++-----------------+-------------+------+-----+---------+-------+
+3 rows in set (0.014 sec)
+
+MariaDB [clothes_store]> desc store;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| storeID       | int(11)     | NO   | PRI | NULL    |       |
+| storeNAME     | varchar(24) | YES  |     | NULL    |       |
+| storeLOCATION | varchar(67) | YES  |     | NULL    |       |
+| employeesID   | int(11)     | YES  | MUL | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+4 rows in set (0.018 sec)
+
+MariaDB [clothes_store]> desc cus;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| cusID    | int(11)     | NO   | PRI | NULL    |       |
+| cusNAME  | varchar(87) | YES  |     | NULL    |       |
+| cusemail | varchar(76) | YES  |     | NULL    |       |
+| transID  | int(11)     | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.031 sec)
+
+MariaDB [clothes_store]> desc trans;
++------------+---------+------+-----+---------+-------+
+| Field      | Type    | Null | Key | Default | Extra |
++------------+---------+------+-----+---------+-------+
+| transID    | int(11) | NO   | PRI | NULL    |       |
+| transDATE  | date    | YES  |     | NULL    |       |
+| transTOTAL | int(11) | YES  |     | NULL    |       |
++------------+---------+------+-----+---------+-------+
+3 rows in set (0.017 sec)
+
+
+MariaDB [clothes_store]> create table cus(
+    -> cusID int not null,
+    -> cusNAME varchar(87),
+    -> cusemail varchar(76),
+    -> primary key (cusID));
+Query OK, 0 rows affected (0.016 sec)
+MariaDB [clothes_store]> alter table item
+    -> add cusID int,
+    -> add foreign key (cusID) references cus(cusID);
+Query OK, 0 rows affected (0.081 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> insert into trans (transID,transDATE,transTOTAL)
+    -> values(657,2023-01-01,300),
+    -> (879,2023-03-28,550);
+Query OK, 2 rows affected, 2 warnings (0.037 sec)
+Records: 2  Duplicates: 0  Warnings: 2
+MariaDB [clothes_store]> insert into cus(cusID,cusNAME,cusemail,transID)
+    -> values(888,'jana sroji','jana@gmail.com',657),
+    -> (999,'sara alhaj','sara@gmail.com',879);
+Query OK, 2 rows affected (0.011 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> insert into employees (employeesID,employeesNAME,employeesSALARY)
+    -> values(666,'sana rahmani',30000),
+    -> (555,'rama alkusair',55000),
+    -> (745,'ahmad bitar',400),
+    -> (886,'ramez mohamed',786);
+Query OK, 4 rows affected (0.006 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> insert into store(storeID,storeNAME,storeLOCATION,employeesID)
+    -> values(1,'R.S clothes','alhamra',666),
+    -> (2,'R.S clothes2','alrwda',555);
+Query OK, 2 rows affected (0.003 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> insert into brand(brandID,brandNAME,brandTYPES)
+    -> values(43,'nike','jacet'),
+    -> (65,'zara','t-shert');
+Query OK, 2 rows affected (0.009 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> update brand
+    -> set brandTYPES='shoes'
+    -> where brandNAME = 'nike';
+Query OK, 1 row affected (0.028 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+MariaDB [clothes_store]> select*from brand;
++---------+-----------+------------+
+| brandID | brandNAME | brandTYPES |
++---------+-----------+------------+
+|      43 | nike      | shoes      |
+|      65 | zara      | t-shert    |
++---------+-----------+------------+
+2 rows in set (0.008 sec)
+MariaDB [clothes_store]> insert into item(itemID,itemNAME,itemPRICE,itemCOLOR,itemSIZE,brandID,storeID,cusID)
+    -> values(47,'Air Max 90',300,'red','38',43,1,888),
+    -> (77,'zara Sportswear Tee',550,'green','L',65,2,999);
+Query OK, 2 rows affected (0.026 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+MariaDB [clothes_store]> select*from item;
++--------+---------------------+-----------+-----------+----------+---------+---------+-------+
+| itemID | itemNAME            | itemPRICE | itemCOLOR | itemSIZE | brandID | storeID | cusID |
++--------+---------------------+-----------+-----------+----------+---------+---------+-------+
+|     47 | Air Max 90          |       300 | red       | 38       |      43 |       1 |   888 |
+|     77 | zara Sportswear Tee |       550 | green     | L        |      65 |       2 |   999 |
++--------+---------------------+-----------+-----------+----------+---------+---------+-------+
+2 rows in set (0.001 sec)
+
+MariaDB [clothes_store]> select*from brand;
++---------+-----------+------------+
+| brandID | brandNAME | brandTYPES |
++---------+-----------+------------+
+|      43 | nike      | shoes      |
+|      65 | zara      | t-shert    |
++---------+-----------+------------+
+2 rows in set (0.000 sec)
+
+MariaDB [clothes_store]> select*from cus;
++-------+------------+----------------+---------+
+| cusID | cusNAME    | cusemail       | transID |
++-------+------------+----------------+---------+
+|   888 | jana sroji | jana@gmail.com |     657 |
+|   999 | sara alhaj | sara@gmail.com |     879 |
++-------+------------+----------------+---------+
+2 rows in set (0.003 sec)
+
+MariaDB [clothes_store]> select*from trans;
++---------+------------+------------+
+| transID | transDATE  | transTOTAL |
++---------+------------+------------+
+|     657 | 0000-00-00 |        300 |
+|     879 | 0000-00-00 |        550 |
++---------+------------+------------+
+2 rows in set (0.003 sec)
+
+MariaDB [clothes_store]> select*from store;
++---------+--------------+---------------+-------------+
+| storeID | storeNAME    | storeLOCATION | employeesID |
++---------+--------------+---------------+-------------+
+|       1 | R.S clothes  | alhamra       |         666 |
+|       2 | R.S clothes2 | alrwda        |         555 |
++---------+--------------+---------------+-------------+
+2 rows in set (0.001 sec)
+
+MariaDB [clothes_store]> select*from employees;
++-------------+---------------+-----------------+
+| employeesID | employeesNAME | employeesSALARY |
++-------------+---------------+-----------------+
+|         555 | rama alkusair |           55000 |
+|         666 | sana rahmani  |           30000 |
+|         745 | ahmad bitar   |             400 |
+|         886 | ramez mohamed |             786 |
++-------------+---------------+-----------------+
+4 rows in set (0.001 sec)
+MariaDB [clothes_store]> delete from employees
+    -> where employeesID=745;
+Query OK, 1 row affected (0.012 sec)
+
+MariaDB [clothes_store]> delete from employees
+    -> where employeesID=886;
+Query OK, 1 row affected (0.005 sec)
+
+MariaDB [clothes_store]> select*from employees;
++-------------+---------------+-----------------+
+| employeesID | employeesNAME | employeesSALARY |
++-------------+---------------+-----------------+
+|         555 | rama alkusair |           55000 |
+|         666 | sana rahmani  |           30000 |
++-------------+---------------+-----------------+
+2 rows in set (0.001 sec)
